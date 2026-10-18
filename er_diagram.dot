@@ -1,0 +1,25 @@
+digraph ER {
+ graph [rankdir=LR, splines=ortho, nodesep=0.45, ranksep=0.8, pad=0.2, bgcolor="white", label="Football League — ER diagram (SQL Server 2022)\nAnchor tables and bitemporal version tables", labelloc=t, fontsize=18, fontname="Arial"];
+ node [shape=plain, fontname="Arial", fontsize=9]; edge [fontname="Arial", fontsize=8, color="#444444", arrowsize=0.7];
+ league [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#d9eaf7"><B>league</B><BR/><I>Non-temporal anchor</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK league_id</U></TD></TR><TR><TD ALIGN="LEFT">league_name, country</TD></TR></TABLE>>];
+ club [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#d9eaf7"><B>club</B><BR/><I>Non-temporal anchor</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK club_id</U></TD></TR></TABLE>>];
+ player [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#d9eaf7"><B>player</B><BR/><I>Non-temporal anchor</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK player_id</U></TD></TR><TR><TD ALIGN="LEFT">full_name, birth_date, nationality</TD></TR></TABLE>>];
+ coach [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#d9eaf7"><B>coach</B><BR/><I>Non-temporal anchor</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK coach_id</U></TD></TR><TR><TD ALIGN="LEFT">full_name, nationality, birth_date</TD></TR></TABLE>>];
+ season [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#d9eaf7"><B>season</B><BR/><I>Non-temporal</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK season_id</U></TD></TR><TR><TD ALIGN="LEFT">season_name, start_date, end_date</TD></TR></TABLE>>];
+ club_version [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fce5cd"><B>club_version</B><BR/><I>Bitemporal (VT + TT)</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK version_id</U></TD></TR><TR><TD ALIGN="LEFT">FK club_id, FK league_id</TD></TR><TR><TD ALIGN="LEFT">club_name, city</TD></TR><TR><TD ALIGN="LEFT">valid_from, valid_to</TD></TR><TR><TD ALIGN="LEFT">tx_from, tx_to, FK tx_id</TD></TR></TABLE>>];
+ contract_version [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fce5cd"><B>contract_version</B><BR/><I>Bitemporal (VT + TT)</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK version_id</U></TD></TR><TR><TD ALIGN="LEFT">FK player_id, club_id, season_id</TD></TR><TR><TD ALIGN="LEFT">contract_type, shirt_number</TD></TR><TR><TD ALIGN="LEFT">valid_from, valid_to</TD></TR><TR><TD ALIGN="LEFT">tx_from, tx_to, FK tx_id</TD></TR></TABLE>>];
+ salary [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fce5cd"><B>player_salary_version</B><BR/><I>Bitemporal (VT + TT)</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK version_id</U></TD></TR><TR><TD ALIGN="LEFT">FK player_id, salary_eur</TD></TR><TR><TD ALIGN="LEFT">valid_from, valid_to</TD></TR><TR><TD ALIGN="LEFT">tx_from, tx_to, FK tx_id</TD></TR></TABLE>>];
+ coach_assignment [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fce5cd"><B>coach_assignment_version</B><BR/><I>Bitemporal (VT + TT)</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK version_id</U></TD></TR><TR><TD ALIGN="LEFT">FK coach_id, FK club_id, role_name</TD></TR><TR><TD ALIGN="LEFT">valid_from, valid_to</TD></TR><TR><TD ALIGN="LEFT">tx_from, tx_to, FK tx_id</TD></TR></TABLE>>];
+ tx [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#d9ead3"><B>tx_registry</B><BR/><I>Transaction log</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK tx_id</U></TD></TR><TR><TD ALIGN="LEFT">tx_time, author, reason</TD></TR></TABLE>>];
+ qp [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#eeeeee"><B>query_params</B><BR/><I>Query support</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK parameter_id</U></TD></TR><TR><TD ALIGN="LEFT">valid_at, known_at</TD></TR><TR><TD ALIGN="LEFT">period_start, period_end, subject_id</TD></TR></TABLE>>];
+ cal [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#eeeeee"><B>calendar_month</B><BR/><I>Query support</I></TD></TR><TR><TD ALIGN="LEFT"><U>PK month_start</U></TD></TR></TABLE>>];
+ league -> club_version [label="1 to many"];
+ club -> club_version [label="1 to many"];
+ player -> contract_version [label="1 to many"];
+ club -> contract_version [label="1 to many"];
+ season -> contract_version [label="1 to many"];
+ player -> salary [label="1 to many"];
+ coach -> coach_assignment [label="1 to many"];
+ club -> coach_assignment [label="1 to many"];
+ tx -> club_version [label="1 to many", style=dashed]; tx -> contract_version [style=dashed]; tx -> salary [style=dashed]; tx -> coach_assignment [style=dashed];
+}
