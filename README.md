@@ -25,7 +25,7 @@ anumit moment.
 ## 2. Fișierele proiectului
 
 ``` text
-<lastname_firstname>/
+<Guia_Alex>/
 ├── README.md
 ├── 01_schema.sql
 ├── 02_data.sql
@@ -38,9 +38,6 @@ anumit moment.
 └── report.pdf
 ```
 
-`er_diagram.dot` este fișierul-sursă Graphviz al diagramei.
-`06_advanced_a1.sql` și `06_advanced_a2.sql` sunt fișiere opționale
-pentru pista avansată și nu fac parte din fluxul principal.
 
 ## 3. Modelul de date
 
@@ -428,8 +425,7 @@ index. Planurile se compară după operatorii folosiți, rândurile estimate
     documentație.
 -   `er_diagram.png` --- versiunea imagine a diagramei.
 -   `er_diagram.dot` --- sursa Graphviz a diagramei.
--   `report.pdf` --- raportul proiectului, în limba română, cu limita de
-    cinci pagini.
+-   `report.pdf` --- raportul proiectului.
 
 ## 12. Fișierele pentru predare
 
