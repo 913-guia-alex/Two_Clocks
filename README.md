@@ -5,7 +5,7 @@ cloud\
 **Tema:** Assignment 1 --- Two Clocks: Build a Bitemporal Database\
 **Domeniu:** Ligă de fotbal\
 **SGBD:** Microsoft SQL Server 2022\
-**Interfață:** SQL Server Management Studio (SSMS) 19
+**Facut de:** Guia Alex
 
 ## 1. Scopul proiectului
 
